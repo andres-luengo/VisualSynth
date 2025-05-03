@@ -1,18 +1,21 @@
 VisualSynth : Window {
 	var name, bounds;
 	var mainView;
+	var sandbox;
 
-	*new {|name = "Visual Synth", bounds = (Rect(200, 200, 800, 600)), resizable = false ... args|
+	*new {|name = "Visual Synth", bounds = (Rect(100, 100, 800, 600)), resizable = false ... args|
 		var instance = super.new(name, bounds, resizable, *args);
 		instance.prVisualSynthInit;
 		^instance;
 	}
 
 	prVisualSynthInit {
-		this.bounds.postln;
+		sandbox = Sandbox();
 		this.layout = VLayout(
-			[Button().states_([["yes", Color.grey, Color.white], ["no", Color.white, Color.grey]])]
+			sandbox.uview
 		);
+		10.do({|i| sandbox.addNode(SynthNode(i * 10, i * 10)) });
+
 		this.front;
 		^this;
 	}
