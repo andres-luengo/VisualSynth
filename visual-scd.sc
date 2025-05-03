@@ -10,6 +10,7 @@ VisualSynth : Window {
 	}
 
 	prVisualSynthInit {
+		this.acceptsMouseOver = true;
 		sandbox = Sandbox();
 		this.layout = VLayout(
 			sandbox.uview
