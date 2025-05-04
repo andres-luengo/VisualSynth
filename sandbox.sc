@@ -1,8 +1,8 @@
 Sandbox {
 	var <uview; // UserView
 	var nodes; // List[Node]
-	var hoveredNode; // SynthNode | nil
-	var selectedNode; // SynthNode | nil
+	var hoveredNode; // VSNode | nil
+	var selectedNode; // VSNode| nil
 
 	var cameraMatrix; // matrix
 
@@ -57,6 +57,16 @@ Sandbox {
 		dragCoords = [x, y];
 
 		this.prUpdateNodeSelection(x, y);
+
+		if (selectedTool == \Node, {
+			var worldCoords = this.prToWorldCoord([x, y]);
+			this.addNode(VSNode.new(*worldCoords));
+			uview.refresh;
+		});
+		if (selectedTool == \Delete, {
+			nodes.remove(selectedNode);
+			uview.refresh;
+		})
 	}
 
 	prUpdateNodeSelection {|x, y|
@@ -81,7 +91,8 @@ Sandbox {
 	}
 
 	prDragNode { |x, y|
-		var worldCoords = this.prToWorldCoord([x, y]);
+		var worldCoords;
+		worldCoords = this.prToWorldCoord([x, y]);
 		selectedNode.x = worldCoords[0] - nodeDragOffset[0];
 		selectedNode.y = worldCoords[1] - nodeDragOffset[1];
 		uview.refresh;
@@ -89,7 +100,9 @@ Sandbox {
 
 	prMouseMove {|view, x, y, modifiers|
 		if ( panning, { this.prDragCamera(x, y); });
-		if ( selectedNode.isNil.not, { this.prDragNode(x, y); } );
+		if ((selectedNode.isNil.not) && (selectedTool == \Edit), {
+				this.prDragNode(x, y);
+		});
 	}
 
 	prMouseUp {|view, x, y, modifiers, buttonNumber|
@@ -142,7 +155,7 @@ Sandbox {
 		});
 	}
 
-	prMouseOver {|view, x, y|
+	prUpdateNodeHover { |x, y|
 		var hoveredNodes = this.prNodesUnderMouse(x, y);
 		var oldHoveredNode = hoveredNode;
 		if (hoveredNode.isNil.not, {
@@ -157,6 +170,10 @@ Sandbox {
 		});
 	}
 
+	prMouseOver {|view, x, y|
+		if (selectedTool != \Wire, {this.prUpdateNodeHover(x, y)});
+	}
+
 	drawNodes {
 		Pen.matrix = cameraMatrix;
 		nodes.do({|node|
@@ -164,10 +181,7 @@ Sandbox {
 		})
 	}
 
-	addNode {|node| nodes.add(node) }
+	addNode {|node| nodes.add(node); }
 
-	/*toolSelected {|value|
-		selectedTool = value;
-		selectedTool.postln;
-	}*/
+	toolSelected {|value| selectedTool = value; }
 }

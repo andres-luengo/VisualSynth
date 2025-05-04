@@ -18,8 +18,15 @@ VisualSynth : Window {
 		toolSelect.items = [
 			\Edit,
 			\Wire,
-			\SinOsc
+			\Node,
+			\Delete
 		];
+		toolSelect.action = {
+			var selectedTool = toolSelect.items[toolSelect.value];
+			sandbox.toolSelected(selectedTool);
+		};
+		toolSelect.action.value; // run once to set selected tool
+
 		toolSelect.maxHeight = (toolSelect.items.size * 18);
 
 		toolBar = HLayout(toolSelect);
@@ -28,7 +35,6 @@ VisualSynth : Window {
 			[toolBar, alignment: \top],
 			[sandbox.uview, alignment: \bottom]
 		);
-		10.do({|i| sandbox.addNode(SynthNode(i * 10, i * 10)) });
 
 		this.front;
 		^this;
