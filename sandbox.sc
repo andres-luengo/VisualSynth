@@ -6,6 +6,8 @@ Sandbox {
 
 	var cameraMatrix; // matrix
 
+	var selectedTool; // str
+
 	var clicked; // bool
 	var clickCoords; // Array[int], length 2
 	var dragCoords; // Array[int], length 2
@@ -163,4 +165,9 @@ Sandbox {
 	}
 
 	addNode {|node| nodes.add(node) }
+
+	/*toolSelected {|value|
+		selectedTool = value;
+		selectedTool.postln;
+	}*/
 }
