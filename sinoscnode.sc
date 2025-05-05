@@ -7,7 +7,7 @@ SinOscNode : VSNode {
 		inputs = [
 			WirePort(this, x, y + this.prPortY(0, 2), \left, "FREQ"),
 			WirePort(this, x, y + this.prPortY(1, 2), \left, "MUL")
-		]
+		];
 		output = WirePort(this, x + size, y + (size/2), \right);
 	}
 
