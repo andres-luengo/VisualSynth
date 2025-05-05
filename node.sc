@@ -134,5 +134,5 @@ VSNode {
 	}
 
 	// should be overridden
-	openProperties { "OPENING PROPERTIES".postln }
+	openProperties {}
 }
