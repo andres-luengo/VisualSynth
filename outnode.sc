@@ -1,4 +1,20 @@
 OutNode : VSNode {
+	classvar instance;
+
+	*new {|...args|
+		if (instance.isNil.not) {
+			"May not create more than one Out node.".postln;
+			MethodError.throw;
+		};
+		instance = super.new(*args);
+		^instance;
+	}
+
+	delete {
+		instance = nil;
+		^super.delete;
+	}
+
 	drawBody {
 		Pen.moveTo(0@0);
 
