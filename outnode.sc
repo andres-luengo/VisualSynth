@@ -25,8 +25,6 @@ OutNode : VSNode {
 		Pen.fillStroke;
 	}
 
-
-
 	prInitPorts {
 		inputs = [WirePort(this, x, y + (size/2), \left)];
 		output = NullWirePort.new;
