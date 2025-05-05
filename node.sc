@@ -1,10 +1,10 @@
 VSNode {
 	classvar nodeCount = 0;
-	var <>x, <>y, <>color;
+	var <x, <y, <>color;
 	var <>hovered;
 	var <>selected;
-	var inputs;
-	var output;
+	var <inputs;
+	var <output;
 	const size = 50;
 
 	*new {
@@ -15,8 +15,10 @@ VSNode {
 	}
 
 	prVSNodeInit {
-		inputs = [WirePort(this), WirePort(this)];
-		output = WirePort(this, \right);
+		inputs = 2.collect({|i|
+			WirePort(this, x, y + this.prPortY(i, 2), \left)
+		});
+		output = WirePort(this, x + size, y + (size/2), \right);
 		hovered = false;
 		selected = false;
 		^this;
@@ -24,8 +26,12 @@ VSNode {
 
 	draw {
 		Pen.translate(x, y);
-		this.drawBody;
-		this.drawPorts;
+		Pen.use({
+			this.drawBody;
+		});
+		Pen.use({
+			this.drawPorts;
+		});
 	}
 
 	drawBody {
@@ -49,15 +55,17 @@ VSNode {
 		Pen.lineTo(0@size);
 		Pen.lineTo(0@0);
 
+
 		Pen.fillStroke;
 	}
 
 	drawPorts {
 		var spacing = size / (inputs.size + 1);
+		Pen.moveTo(0@0);
 		Pen.use({
-			inputs.do({ |port|
+			inputs.do({ |port, i|
 				Pen.translate(0, spacing);
-				Pen.use({ port.draw })
+				Pen.use({ port.draw });
 			})
 		});
 		Pen.use({
@@ -70,5 +78,48 @@ VSNode {
 		var boundingRect = Rect.new(this.x, this.y, size, size);
 		var result = boundingRect.contains(x@y);
 		^result;
+	}
+
+	portAt { |wx, wy| // <- IN WORLD FRAME
+		var nx = wx - x; // <- TO NODE FRAME
+		var ny = wy - y;
+		var px, py; // <- PORT FRAME
+		inputs.do({|port, i|
+			px = nx;
+			py = ny - this.prPortY(i);
+
+			// returns first hit... if ports on the same node overlap, i think there's bigger problems
+			if (port.contains(px, py), {
+				^port;
+			});
+		});
+
+		px = nx - size;
+		py = ny - (size / 2);
+		if (output.contains(px, py), {
+			^output;
+		});
+		^nil;
+	}
+
+	prPortY { |i, numInputs = (inputs.size)|
+		var spacing = size / numInputs;
+		^(spacing * (i + 0.5)); // <- NODE FRAME
+	}
+
+	x_ {|val|
+		x = val;
+		inputs.do({|port|
+			port.x = val;
+		});
+		output.x = val + size;
+	}
+
+	y_ {|val|
+		y = val;
+		inputs.do({|port, i|
+			port.y = this.prPortY(i)
+		});
+		output.y = val + size/2;
 	}
 }

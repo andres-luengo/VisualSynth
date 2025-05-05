@@ -1,8 +1,12 @@
 Sandbox {
 	var <uview; // UserView
 	var nodes; // List[Node]
+	var wires; // List[Wire]
 	var hoveredNode; // VSNode | nil
 	var selectedNode; // VSNode| nil
+	var hoveredPort; // WirePort | nil
+	var wireIn; // WirePort | nil
+	var mouseX, mouseY; // WORLD COORDS
 
 	var cameraMatrix; // matrix
 
@@ -30,13 +34,14 @@ Sandbox {
 
 	prSandboxInit {|parent, bounds|
 		uview = UserView.new(parent, bounds);
-		uview.drawFunc = { this.drawNodes };
+		uview.drawFunc = { this.draw };
 		uview.background = Color.white;
 
 		uview.mouseDownAction = {|... args| this.prMouseDown(*args) };
 		uview.mouseMoveAction = {|... args| this.prMouseMove(*args) };
 		uview.mouseWheelAction = {|... args| this.prMouseWheel(*args) };
 		uview.mouseOverAction = {|... args| this.prMouseOver(*args) };
+		uview.mouseUpAction = {|... args| this.prMouseUp(*args) };
 
 		// zoomX, shearY, shearX, zoomY, translateX, translateY
 		// translates are position of origin
@@ -48,6 +53,33 @@ Sandbox {
 		zoom = 1;
 
 		nodes = List.new;
+		wires = List.new;
+
+		mouseX = 0;
+		mouseY = 0;
+	}
+
+	prDeleteMouseDown {
+		if (selectedNode.isNil.not) {
+			nodes.remove(selectedNode);
+
+			wires = wires.reject({|wire|
+				if ((wire.in.node == selectedNode) ||
+					(wire.out.node == selectedNode)) {
+					wire.delete;
+					true;
+				} {
+					false;
+				}
+			})
+		};
+		if (hoveredPort.isNil.not) {
+			wires = wires.difference(hoveredPort.wires);
+			hoveredPort.wires.collectCopy({|wire|
+				wire.delete;
+			});
+			hoveredPort.wires = List.new;
+		};
 	}
 
 	prMouseDown {|view, x, y, modifiers, buttonNumber, clickCount|
@@ -58,15 +90,28 @@ Sandbox {
 
 		this.prUpdateNodeSelection(x, y);
 
-		if (selectedTool == \Node, {
+		if (selectedTool == \Node && modifiers.isAlt.not, {
 			var worldCoords = this.prToWorldCoord([x, y]);
-			this.addNode(VSNode.new(*worldCoords));
+			var node = VSNode.new(*worldCoords);
+			this.addNode(node);
 			uview.refresh;
 		});
-		if (selectedTool == \Delete, {
-			nodes.remove(selectedNode);
+		if (selectedTool == \Delete && modifiers.isAlt.not, {
+			this.prDeleteMouseDown;
+			uview.refresh;
+		});
+		if (selectedTool == \Wire && modifiers.isAlt.not, {
+			this.prWireDown(x, y);
 			uview.refresh;
 		})
+	}
+
+	prWireDown {|x, y|
+		if ((hoveredPort.isNil.not), {
+			if (hoveredPort.dir == \right) {
+				wireIn = hoveredPort;
+				this.prUpdateMouseCoords(x, y);
+		}});
 	}
 
 	prUpdateNodeSelection {|x, y|
@@ -103,11 +148,37 @@ Sandbox {
 		if ((selectedNode.isNil.not) && (selectedTool == \Edit), {
 				this.prDragNode(x, y);
 		});
+
+
+		if (selectedTool == \Wire, { this.prUpdatePortHover(x, y) });
+		if (wireIn.isNil.not, {
+			this.prUpdateMouseCoords(x, y);
+			uview.refresh;
+		});
+	}
+
+	prWireExists {|in, out|
+		^wires.any({|wire|
+			(wire.in == in) &&
+			(wire.out == out)
+		});
+	}
+
+	prWireMouseUp {
+		if (hoveredPort.isNil.not, {
+			if ((this.prWireExists.not) && (hoveredPort.dir == \left)) {
+				wires.add(Wire(wireIn, hoveredPort));
+			}
+		});
+		wireIn = nil;
+		uview.refresh;
 	}
 
 	prMouseUp {|view, x, y, modifiers, buttonNumber|
 		clicked = false;
 		panning = false;
+
+		if (selectedTool == \Wire, { this.prWireMouseUp })
 	}
 
 	prDragCamera {|x, y|
@@ -115,7 +186,6 @@ Sandbox {
 
 		cameraMatrix[4] = cameraMatrix[4] + displacement[0];
 		cameraMatrix[5] = cameraMatrix[5] + displacement[1];
-		cameraMatrix[[0, 3, 4, 5]].postln;
 		this.uview.refresh;
 
 		dragCoords = [x, y];
@@ -170,14 +240,83 @@ Sandbox {
 		});
 	}
 
+	prPortsUnderMouse { |x, y|
+		var worldCoords, ports;
+
+		worldCoords = this.prToWorldCoord([x, y]);
+		ports = List();
+		// collect inputs
+		nodes.do({|node, i|
+			var port = node.portAt(*worldCoords);
+			if (port.isNil.not, {
+				ports.add(port);
+			})
+		});
+		^ports.asArray;
+	}
+
+	prUpdatePortHover { |x, y|
+		var hoveredPorts = this.prPortsUnderMouse(x, y);
+		var oldHoveredPort = hoveredPort;
+		if (hoveredPort.isNil.not, {
+			hoveredPort.hovered = false;
+		});
+		hoveredPort = hoveredPorts.last;
+		if (hoveredPort.isNil.not, {
+			hoveredPort.hovered = true;
+			hoveredPort.wires.postln;
+		});
+		if (hoveredPort != oldHoveredPort, {
+			uview.refresh;
+		});
+	}
+
+	prUpdateMouseCoords {|x, y|
+		var coords = this.prToWorldCoord([x, y]);
+		mouseX = coords[0];
+		mouseY = coords[1];
+	}
+
 	prMouseOver {|view, x, y|
-		if (selectedTool != \Wire, {this.prUpdateNodeHover(x, y)});
+		if ((selectedTool == \Edit) ||
+			(selectedTool == \Delete), {
+				this.prUpdateNodeHover(x, y)
+		});
+
+		if ((selectedTool == \Wire) ||
+			(selectedTool == \Delete), {
+			this.prUpdatePortHover(x, y)
+		});
+	}
+
+	draw {
+		Pen.matrix = cameraMatrix;
+		this.drawNodes;
+		this.drawWires;
+		this.drawTempWire;
 	}
 
 	drawNodes {
-		Pen.matrix = cameraMatrix;
 		nodes.do({|node|
 			Pen.use({node.draw});
+		});
+	}
+
+	drawWires {
+		wires.do({|wire|
+			Pen.use({wire.draw});
+		});
+	}
+
+	drawTempWire {
+		if (wireIn != nil, {
+			Pen.line(
+				(wireIn.x)@(wireIn.y),
+				mouseX@mouseY
+			);
+			Pen.width = 3;
+			Pen.strokeColor = Color.gray;
+			Pen.stroke;
 		})
 	}
 

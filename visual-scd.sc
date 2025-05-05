@@ -10,7 +10,7 @@ VisualSynth : Window {
 	}
 
 	prVisualSynthInit {
-		var toolBar;
+		var toolbar;
 		this.acceptsMouseOver = true;
 
 		sandbox = Sandbox();
@@ -29,10 +29,10 @@ VisualSynth : Window {
 
 		toolSelect.maxHeight = (toolSelect.items.size * 18);
 
-		toolBar = HLayout(toolSelect);
+		toolbar = HLayout(toolSelect);
 
 		this.layout = VLayout(
-			[toolBar, alignment: \top],
+			[toolbar, alignment: \top],
 			[sandbox.uview, alignment: \bottom]
 		);
 
