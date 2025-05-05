@@ -89,8 +89,9 @@ Sandbox {
 
 		this.prUpdateNodeSelection(x, y);
 
-		if (selectedTool == \Edit) {
-			
+		// double click to open properties
+		if ((selectedTool == \Edit) && (clickCount == 2)) {
+			selectedNode.openProperties;
 		};
 		if (selectedTool == \Node) {
 			this.prNodeDown(x, y);

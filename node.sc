@@ -132,4 +132,7 @@ VSNode {
 		inputs.do {|port| port.clearWires;};
 		output.clearWires;
 	}
+
+	// should be overridden
+	openProperties { "OPENING PROPERTIES".postln }
 }
