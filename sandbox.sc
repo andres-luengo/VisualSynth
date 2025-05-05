@@ -85,16 +85,21 @@ Sandbox {
 		clickCoords = [x, y];
 		dragCoords = [x, y];
 
+		if (panning) { ^nil; }; // escape out if panning
+
 		this.prUpdateNodeSelection(x, y);
 
-		if (selectedTool == \Node && modifiers.isAlt.not) {
+		if (selectedTool == \Edit) {
+			
+		};
+		if (selectedTool == \Node) {
 			this.prNodeDown(x, y);
 		};
-		if (selectedTool == \Delete && modifiers.isAlt.not) {
+		if (selectedTool == \Delete) {
 			this.prDeleteMouseDown;
 			uview.refresh;
 		};
-		if (selectedTool == \Wire && modifiers.isAlt.not) {
+		if (selectedTool == \Wire) {
 			this.prWireDown(x, y);
 			uview.refresh;
 		};
