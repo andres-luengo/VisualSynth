@@ -8,7 +8,7 @@ VisualSynth : Window {
 	*new {|name = "Visual Synth", bounds = (Rect(100, 100, 800, 600)), resizable = false ... args|
 		if (instance.isNil.not) {
 			instance.close;
-		}
+		};
 		instance = super.new(name, bounds, resizable, *args);
 		if (nodeTypes.isNil) {
 			nodeTypes = Dictionary.newFrom([
