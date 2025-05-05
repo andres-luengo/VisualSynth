@@ -1,11 +1,15 @@
 VisualSynth : Window {
 	classvar nodeTypes;
+	classvar instance;
 	var name, bounds;
 	var mainView;
 	var sandbox, toolSelect, nodeSelect;
 
 	*new {|name = "Visual Synth", bounds = (Rect(100, 100, 800, 600)), resizable = false ... args|
-		var instance = super.new(name, bounds, resizable, *args);
+		if (instance.isNil.not) {
+			instance.close;
+		}
+		instance = super.new(name, bounds, resizable, *args);
 		if (nodeTypes.isNil) {
 			nodeTypes = Dictionary.newFrom([
 				Out: OutNode,
@@ -58,6 +62,10 @@ VisualSynth : Window {
 			[sandbox.uview, alignment: \bottom]
 		);
 
+		this.onClose = {
+			sandbox.close;
+			instance= nil;
+		}
 		this.front;
 		^this;
 	}
@@ -69,10 +77,5 @@ VisualSynth : Window {
 			^nil;
 		};
 		^SynthDef(name, { |out| outNode.getUGen(out); });
-	}
-
-	close {
-		sandbox.close;
-		^super.close;
 	}
 }
