@@ -46,7 +46,6 @@ VisualSynth : Window {
 		nodeSelect.action = {
 			var selectedNodeTypeName = nodeSelect.items[nodeSelect.value];
 			var selectedNodeType = nodeTypes[selectedNodeTypeName];
-			"nodeTypes[%]: %".format(selectedNodeTypeName, selectedNodeType).postln;
 			sandbox.nodeTypeSelected(selectedNodeType);
 		};
 		nodeSelect.action.value;

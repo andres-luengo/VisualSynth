@@ -57,7 +57,7 @@ PropertiesWindow : Window {
             // i'm sure there's a more elegant way to do this but that's way 
             // too much work for something that isn't quite the point of this
             // project
-            "INVALID INPUT".postln;
+            "INVALID INPUT".error;
         };
     }
 }

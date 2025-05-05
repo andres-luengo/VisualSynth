@@ -3,7 +3,7 @@ OutNode : VSNode {
 
 	*new {|...args|
 		if (instance.isNil.not) {
-			"May not create more than one Out node.".postln;
+			"May not create more than one Out node.".error;
 			MethodError.throw;
 		};
 		instance = super.new(*args);

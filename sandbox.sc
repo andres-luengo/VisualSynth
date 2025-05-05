@@ -273,7 +273,6 @@ Sandbox {
 		hoveredPort = hoveredPorts.last;
 		if (hoveredPort.isNil.not, {
 			hoveredPort.hovered = true;
-			hoveredPort.wires.postln;
 		});
 		if (hoveredPort != oldHoveredPort, {
 			uview.refresh;
@@ -333,8 +332,5 @@ Sandbox {
 
 	toolSelected {|value| selectedTool = value; }
 
-	nodeTypeSelected {|type|
-		selectedNodeType = type;
-		"nodeTypeSelected: %".format(type).postln;
-	}
+	nodeTypeSelected {|type| selectedNodeType = type; }
 }
