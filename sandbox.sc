@@ -333,4 +333,10 @@ Sandbox {
 	toolSelected {|value| selectedTool = value; }
 
 	nodeTypeSelected {|type| selectedNodeType = type; }
+
+	close {
+		nodes.do {|node|
+			node.delete;
+		}
+	}
 }

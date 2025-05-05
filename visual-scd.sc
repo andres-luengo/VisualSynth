@@ -70,4 +70,9 @@ VisualSynth : Window {
 		};
 		^SynthDef(name, { |out| outNode.getUGen(out); });
 	}
+
+	close {
+		sandbox.close;
+		^super.close;
+	}
 }
