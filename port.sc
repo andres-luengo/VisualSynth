@@ -15,6 +15,8 @@ WirePort {
 		^instance;
 	}
 
+	clearWires { wires.collectCopy { |wire| wire.delete; } }
+
 	prWirePortInit {
 		var leftEnd;
 		hovered = false;

@@ -62,17 +62,13 @@ Sandbox {
 
 	prDeleteMouseDown {
 		if (selectedNode.isNil.not) {
+			selectedNode.delete;
 			nodes.remove(selectedNode);
 
 			wires = wires.reject({|wire|
-				if ((wire.in.node == selectedNode) ||
-					(wire.out.node == selectedNode)) {
-					wire.delete;
-					true;
-				} {
-					false;
-				}
-			})
+				(wire.in.node == selectedNode) ||
+				(wire.out.node == selectedNode)
+			});
 		};
 		if (hoveredPort.isNil.not) {
 			wires = wires.difference(hoveredPort.wires);
@@ -133,7 +129,7 @@ Sandbox {
 			nodes.add(selectedNode);
 
 			// set drag offset (so you don't only drag from top left corner)
-			nodeDragOffset = [x, y] - [selectedNode.x, selectedNode.y];
+			nodeDragOffset = this.prToWorldCoord([x, y]) - [selectedNode.x, selectedNode.y];
 		});
 		if (oldSelection != selectedNode, {
 			uview.refresh;
@@ -164,17 +160,19 @@ Sandbox {
 
 	prWireExists {|in, out|
 		^wires.any({|wire|
-			(wire.in == in) &&
-			(wire.out == out)
+			(wire.in === in) &&
+			(wire.out === out)
 		});
 	}
 
 	prWireMouseUp {
-		if (hoveredPort.isNil.not, {
-			if ((this.prWireExists.not) && (hoveredPort.dir == \left)) {
+		if (hoveredPort.isNil.not) {
+			if ((this.prWireExists(wireIn, hoveredPort).not) &&
+				(hoveredPort.dir == \left)) {
+
 				wires.add(Wire(wireIn, hoveredPort));
 			}
-		});
+		};
 		wireIn = nil;
 		uview.refresh;
 	}

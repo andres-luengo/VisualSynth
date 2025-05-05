@@ -14,11 +14,15 @@ VSNode {
 		^instance;
 	}
 
-	prVSNodeInit {
+	prInitPorts {
 		inputs = 2.collect({|i|
 			WirePort(this, x, y + this.prPortY(i, 2), \left)
 		});
 		output = WirePort(this, x + size, y + (size/2), \right);
+	}
+
+	prVSNodeInit {
+		this.prInitPorts;
 		hovered = false;
 		selected = false;
 		^this;
@@ -122,5 +126,10 @@ VSNode {
 			port.y = val + this.prPortY(i);
 		});
 		output.y = val + (size/2);
+	}
+
+	delete {
+		inputs.do {|port| port.clearWires;};
+		output.clearWires;
 	}
 }
