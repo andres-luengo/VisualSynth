@@ -1,0 +1,27 @@
+OutNode : VSNode {
+	drawBody {
+		Pen.moveTo(0@0);
+
+		Pen.fillColor = Color.blue;
+
+		if (selected, {
+			Pen.strokeColor = Color.black;
+		}, {
+			Pen.strokeColor = Color.gray;
+		});
+		if (hovered || selected, {
+			Pen.width = 4;
+		}, {
+			Pen.width = 2;
+		});
+
+		Pen.lineTo((size/2)@0);
+		Pen.addArc((size/2)@(size/2), size/2, -pi/2,pi);
+		Pen.moveTo((size/2)@(size));
+		Pen.lineTo(0@size);
+		Pen.lineTo(0@0);
+
+
+		Pen.fillStroke;
+	}
+}

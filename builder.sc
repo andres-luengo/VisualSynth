@@ -1,0 +1,3 @@
+VisualSynthBuilder {
+	*new {}
+}
