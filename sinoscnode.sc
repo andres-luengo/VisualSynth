@@ -3,6 +3,14 @@ SinOscNode : VSNode {
 	var mul = 1.0;
 	var add = 0.0;
 
+	prInitNodes {
+		inputs = [
+			WirePort(this, x, y + this.prPortY(0, 2), \left, "FREQ"),
+			WirePort(this, x, y + this.prPortY(1, 2), \left, "MUL")
+		]
+		output = WirePort(this, x + size, y + (size/2), \right);
+	}
+
 	drawBody {
 		Pen.moveTo(0@0);
 
