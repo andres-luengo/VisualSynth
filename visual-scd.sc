@@ -65,7 +65,7 @@ VisualSynth : Window {
 		this.onClose = {
 			sandbox.close;
 			instance= nil;
-		}
+		};
 		this.front;
 		^this;
 	}
