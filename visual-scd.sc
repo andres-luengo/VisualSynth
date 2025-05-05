@@ -63,7 +63,12 @@ VisualSynth : Window {
 		^this;
 	}
 
-	getSynthDef {
-
+	getSynthDef {|name = \visualsynth|
+		var outNode = OutNode.instance;
+		if (outNode.isNil) {
+			"Need at least one Out node to make a SynthDef.".error;
+			^nil;
+		};
+		^SynthDef(name, { |out| outNode.getUGen(out); });
 	}
 }

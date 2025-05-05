@@ -1,7 +1,7 @@
 Sandbox {
 	var <uview; // UserView
-	var nodes; // List[Node]
-	var wires; // List[Wire]
+	var <nodes; // List[Node]
+	var <wires; // List[Wire]
 	var hoveredNode; // VSNode | nil
 	var selectedNode; // VSNode| nil
 	var selectedNodeType; // Class

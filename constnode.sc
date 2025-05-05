@@ -33,4 +33,8 @@ ConstNode : VSNode {
             }
         );
     }
+
+    getUGen {
+        ^Mix.ar(constValue);
+    }
 }   

@@ -135,4 +135,19 @@ VSNode {
 
 	// should be overridden
 	openProperties {}
+
+	getUGen {}
+
+	inSignal {|i, default|
+		var inWires = inputs[i].wires;
+		var gens;
+		if (inWires.size == 0) { 
+			gens = [default];
+		} {
+			gens = inWires.collect {|wire|
+				wire.in.node.getUGen;
+			};
+		};
+		^Mix.ar(gens);
+	}
 }

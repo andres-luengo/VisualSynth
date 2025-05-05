@@ -1,5 +1,5 @@
 OutNode : VSNode {
-	classvar instance;
+	classvar <instance;
 
 	*new {|...args|
 		if (instance.isNil.not) {
@@ -44,5 +44,9 @@ OutNode : VSNode {
 	prInitPorts {
 		inputs = [WirePort(this, x, y + (size/2), \left)];
 		output = NullWirePort.new;
+	}
+
+	getUGen {|out|
+		^Out.ar(out, Pan2.ar(this.inSignal(0, 0))).poll;
 	}
 }

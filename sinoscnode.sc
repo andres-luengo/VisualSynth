@@ -1,6 +1,6 @@
 SinOscNode : VSNode {
 	var freq = 440;
-	var amp = 1.0;
+	var mul = 1.0;
 	var add = 0.0;
 
 	drawBody {
@@ -39,14 +39,14 @@ SinOscNode : VSNode {
     
     prUpdateValues {|values|
         freq = values[0].asFloat;
-		amp = values[1].asFloat;
+		mul = values[1].asFloat;
 		add = values[2].asFloat;
     }
     
     openProperties {
         PropertiesWindow.new(
             properties: #["Frequency", "Amplitude", "Add"],
-            initialValues: [freq, amp, add],
+            initialValues: [freq, mul, add],
             doneCallback: { |values|
                 var validateResult = this.prValidateValues(values);
                 if (validateResult) {
@@ -56,4 +56,11 @@ SinOscNode : VSNode {
             }
         );
     }
+
+	getUGen {
+		^SinOsc.ar(
+			freq: this.inSignal(0, freq),
+			mul: this.inSignal(1, mul)
+		);
+	}
 }
