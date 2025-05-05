@@ -4,6 +4,7 @@ Sandbox {
 	var wires; // List[Wire]
 	var hoveredNode; // VSNode | nil
 	var selectedNode; // VSNode| nil
+	var selectedNodeType; // Class
 	var hoveredPort; // WirePort | nil
 	var wireIn; // WirePort | nil
 	var mouseX, mouseY; // WORLD COORDS
@@ -323,4 +324,8 @@ Sandbox {
 	addNode {|node| nodes.add(node); }
 
 	toolSelected {|value| selectedTool = value; }
+
+	nodeTypeSelected {|type|
+		selectedNodeType = type;
+	}
 }

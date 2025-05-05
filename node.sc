@@ -88,7 +88,8 @@ VSNode {
 			px = nx;
 			py = ny - this.prPortY(i);
 
-			// returns first hit... if ports on the same node overlap, i think there's bigger problems
+			// returns first hit...
+			// if ports on the same node overlap, i think there's bigger problems
 			if (port.contains(px, py), {
 				^port;
 			});
@@ -118,7 +119,7 @@ VSNode {
 	y_ {|val|
 		y = val;
 		inputs.do({|port, i|
-			port.y = this.prPortY(i)
+			port.y = this.prPortY(i);
 		});
 		output.y = val + size/2;
 	}
