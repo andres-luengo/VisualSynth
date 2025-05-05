@@ -60,7 +60,8 @@ SinOscNode : VSNode {
 	getUGen {
 		^SinOsc.ar(
 			freq: this.inSignal(0, freq),
-			mul: this.inSignal(1, mul)
+			mul: this.inSignal(1, mul),
+			add: add
 		);
 	}
 }
