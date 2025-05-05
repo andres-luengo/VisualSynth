@@ -10,7 +10,7 @@ ConstNode : VSNode {
         if (values.size != 1) {
             ^false;
         };
-        if ("\\d+(\\.\\d+)?".matchRegexp(values[0]).not) {
+        if ("^-?\\d+(\\.\\d+)?$".matchRegexp(values[0]).not) {
             ^false;
         }
         ^true;
