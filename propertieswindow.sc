@@ -29,7 +29,7 @@ PropertiesWindow : Window {
             *properties.collect { |propName, i|
                 var textField;
                 textField = TextField.new;
-                if (initValues.isNil.not) {value_(initValues[i])};
+                if (initValues.isNil.not) {textField.value_(initValues[i])};
                 textFields[i] = textField;
 
                 HLayout.new(
