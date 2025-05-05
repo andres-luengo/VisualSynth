@@ -119,7 +119,7 @@ VSNode {
 	y_ {|val|
 		y = val;
 		inputs.do({|port, i|
-			port.y = this.prPortY(i);
+			port.y = val + this.prPortY(i);
 		});
 		output.y = val + size/2;
 	}

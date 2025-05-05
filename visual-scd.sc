@@ -43,9 +43,16 @@ VisualSynth : Window {
 			\SinOsc,
 			\Const
 		];
+		nodeSelect.action = {
+			var selectedNodeTypeName = nodeSelect.items[nodeSelect.value];
+			var selectedNodeType = nodeTypes[selectedNodeTypeName];
+			"nodeTypes[%]: %".format(selectedNodeTypeName, selectedNodeType).postln;
+			sandbox.nodeTypeSelected(selectedNodeType);
+		};
+		nodeSelect.action.value;
 		nodeSelect.maxHeight = (nodeSelect.items.size * 18);
 
-		toolbar = HLayout(toolSelect);
+		toolbar = HLayout(toolSelect, nodeSelect);
 
 		this.layout = VLayout(
 			[toolbar, alignment: \top],

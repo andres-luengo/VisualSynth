@@ -92,10 +92,7 @@ Sandbox {
 		this.prUpdateNodeSelection(x, y);
 
 		if (selectedTool == \Node && modifiers.isAlt.not, {
-			var worldCoords = this.prToWorldCoord([x, y]);
-			var node = VSNode.new(*worldCoords);
-			this.addNode(node);
-			uview.refresh;
+			this.prNodeDown(x, y);
 		});
 		if (selectedTool == \Delete && modifiers.isAlt.not, {
 			this.prDeleteMouseDown;
@@ -105,6 +102,13 @@ Sandbox {
 			this.prWireDown(x, y);
 			uview.refresh;
 		})
+	}
+
+	prNodeDown {|x, y|
+		var worldCoords = this.prToWorldCoord([x, y]);
+		var node = selectedNodeType.new(*worldCoords);
+		this.addNode(node);
+		uview.refresh;
 	}
 
 	prWireDown {|x, y|
@@ -327,5 +331,6 @@ Sandbox {
 
 	nodeTypeSelected {|type|
 		selectedNodeType = type;
+		"nodeTypeSelected: %".format(type).postln;
 	}
 }
