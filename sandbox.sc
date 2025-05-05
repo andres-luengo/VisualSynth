@@ -87,17 +87,17 @@ Sandbox {
 
 		this.prUpdateNodeSelection(x, y);
 
-		if (selectedTool == \Node && modifiers.isAlt.not, {
+		if (selectedTool == \Node && modifiers.isAlt.not) {
 			this.prNodeDown(x, y);
-		});
-		if (selectedTool == \Delete && modifiers.isAlt.not, {
+		};
+		if (selectedTool == \Delete && modifiers.isAlt.not) {
 			this.prDeleteMouseDown;
 			uview.refresh;
-		});
-		if (selectedTool == \Wire && modifiers.isAlt.not, {
+		};
+		if (selectedTool == \Wire && modifiers.isAlt.not) {
 			this.prWireDown(x, y);
 			uview.refresh;
-		})
+		};
 	}
 
 	prNodeDown {|x, y|
