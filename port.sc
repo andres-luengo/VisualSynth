@@ -13,6 +13,7 @@ WirePort {
 	*new {|node, x, y, dir = \left, label = ""|
 		var instance = super.newCopyArgs(node, x, y, dir, label);
 		instance.prWirePortInit;
+		"label at creation: %".format(label).postln;
 		^instance;
 	}
 
@@ -58,7 +59,8 @@ WirePort {
 
 		Pen.fillColor = Color.gray;
 		Pen.font= Font("Helvetica-Bold", 8);
-		Pen.stringAtPoint(label, (drawLen.neg * 5)@(drawWidth/2.neg))
+		Pen.stringAtPoint(label, (drawLen.neg * 5)@(drawWidth/2.neg));
+		"label: %".format(label).postln;
 	}
 
 	contains {|x, y|
