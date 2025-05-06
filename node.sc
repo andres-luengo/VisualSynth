@@ -1,5 +1,6 @@
 VSNode {
 	classvar nodeCount = 0;
+	var view;
 	var <x, <y, <>color;
 	var <>hovered;
 	var <>selected;
@@ -8,9 +9,9 @@ VSNode {
 	const size = 50;
 
 	*new {
-		|x, y, color = (Color(0.9, 0.9, 0.9))|
+		|view, x, y, color = (Color(0.9, 0.9, 0.9))|
 		var instance;
-		instance = super.newCopyArgs(x, y, color).prVSNodeInit;
+		instance = super.newCopyArgs(view, x, y, color).prVSNodeInit;
 		^instance;
 	}
 

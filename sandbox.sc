@@ -108,7 +108,7 @@ Sandbox {
 
 	prNodeDown {|x, y|
 		var worldCoords = this.prToWorldCoord([x, y]);
-		var node = selectedNodeType.new(*worldCoords);
+		var node = selectedNodeType.new(uview, *worldCoords);
 		this.addNode(node);
 		uview.refresh;
 	}

@@ -18,6 +18,7 @@ ConstNode : VSNode {
     
     prUpdateValues {|values|
         constValue = values[0].asFloat;
+        view.refresh;
     }
     
     openProperties {
@@ -31,6 +32,16 @@ ConstNode : VSNode {
                 };
                 validateResult;
             }
+        );
+    }
+
+    drawBody {
+        super.drawBody;
+        Pen.fillColor = Color.black;
+        Pen.font = Font("Helvetica-Bold", 12);
+        Pen.stringCenteredIn(
+            constValue.asStringPrec(5),
+            Rect.new(0, 0, size, size)
         );
     }
 
