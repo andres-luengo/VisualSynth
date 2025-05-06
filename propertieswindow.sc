@@ -31,6 +31,7 @@ PropertiesWindow : Window {
                 textField = TextField.new;
                 if (initValues.isNil.not) {textField.value_(initValues[i])};
                 textFields[i] = textField;
+                textField.action = { this.prFinish; };
 
                 HLayout.new(
                     StaticText.new.string_(propName),
