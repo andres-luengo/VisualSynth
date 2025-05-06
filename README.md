@@ -14,6 +14,8 @@ The next best thing for parameters is to put in Const nodes and double click the
 
 You can also modify the default values for the frequency, amplitude, and add of the SinOsc nodes by double clicking them with the Edit tool.
 
+You can pan around by pressing Alt and click + dragging. You can also zoom in and out by pressing Alt and using your scroll wheel.
+
 Once you're ready to hear your SinOsc spaghetti,
 ```
 v.getSynthDef(\mySynth).add;
