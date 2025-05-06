@@ -47,6 +47,6 @@ OutNode : VSNode {
 	}
 
 	getUGen {|out|
-		^Out.ar(out, Pan2.ar(this.inSignal(0, 0))).poll;
+		^Out.ar(out, Pan2.ar(this.inSignal(0, 0)));
 	}
 }
